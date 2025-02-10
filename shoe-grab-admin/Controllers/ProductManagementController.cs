@@ -1,62 +1,66 @@
-﻿//using AutoMapper;
-//using Microsoft.AspNetCore.Authorization;
-//using Microsoft.AspNetCore.Mvc;
-//using ShoeGrabProductManagement.Dto;
-//using ShoeGrabCommonModels;
-//using ShoeGrabProductManagement.Contexts;
-//using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using ShoeGrabAdminService.Dto;
+using ShoeGrabCommonModels;
+using static ProductManagement;
 
-//namespace ShoeGrabAdminService.Controllers;
+namespace ShoeGrabAdminService.Controllers;
 
-//[Route("api/admin/products")]
-//[Authorize(Roles = UserRole.Admin)]
-//public class ProductManagementController : ControllerBase
-//{
-//    private readonly ProductContext _context;
-//    private readonly IMapper _mapper;
+[Route("api/admin/products")]
+[Authorize(Roles = UserRole.Admin)]
+public class ProductManagementController : ControllerBase
+{
+    private readonly ProductManagementClient _client;
+    private readonly IMapper _mapper;
 
-//    public ProductManagementController(ProductContext context, IMapper mapper)
-//    {
-//        _context = context;
-//        _mapper = mapper;
-//    }
+    public ProductManagementController(ProductManagementClient client, IMapper mapper)
+    {
+        _client = client;
+        _mapper = mapper;
+    }
 
-//    [HttpPost]
-//    [Authorize(Roles = UserRole.Admin)]
-//    public async Task<ActionResult<ProductDto>> AddProduct([FromBody] ProductDto request)
-//    {
-//        var product = _mapper.Map<Product>(request);
-//        _context.Products.Add(product);
-//        await _context.SaveChangesAsync();
+    [HttpPost]
+    [Authorize(Roles = UserRole.Admin)]
+    public async Task<ActionResult<ProductDto>> AddProduct([FromBody] ProductDto request)
+    {
+        var productMapped = _mapper.Map<ProductProto>(request);
+        var grpcRequest = new AddProductRequest { Product = _mapper.Map<ProductProto>(request) };
+        var response = await _client.AddProductAsync(grpcRequest);
+        
+        if (response.Success)
+        {
+            return Ok(request);
+        }
 
-//        var responseDto = _mapper.Map<ProductDto>(product);
-//        return Ok(responseDto);
-//    }
+        return BadRequest("Unable to update product");
+    }
 
-//    [HttpPut]
-//    public async Task<ActionResult<ProductDto>> UpdateProduct([FromBody] ProductDto request)
-//    {
-//        var product = await _context.Products.FindAsync(request.Id);
-//        if (product == null)
-//            return NotFound();
+    [HttpPut]
+    public async Task<ActionResult<ProductDto>> UpdateProduct([FromBody] ProductDto request)
+    {
+        var grpcRequest = new UpdateProductRequest { Product = _mapper.Map<ProductProto>(request) };
+        var response = await _client.UpdateProductAsync(grpcRequest);
 
-//        var mappedRequest = _mapper.Map(request, product);
+        if (response.Success)
+        {
+            return Ok(request);
+        }
 
-//        await _context.SaveChangesAsync();
+        return BadRequest("Unable to add product");
+    }
 
-//        return Ok(_mapper.Map<ProductDto>(product));
-//    }
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteProduct(int id)
+    {
+        var request = new DeleteProductRequest { Id = id };
+        var response = await _client.DeleteProductAsync(request);
 
-//    [HttpDelete("{id}")]
-//    public async Task<IActionResult> DeleteProduct(int id)
-//    {
-//        var product = await _context.Products.FindAsync(id);
-//        if (product == null)
-//            return NotFound();
+        if (response.Success)
+        {
+            return Ok();
+        }
 
-//        _context.Products.Remove(product);
-//        await _context.SaveChangesAsync();
-
-//        return NoContent();
-//    }
-//}
+        return BadRequest();
+    }
+}
