@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.10.35027.167
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShoeGrabAdminService", "shoe-grab-admin\ShoeGrabAdminService.csproj", "{612D857A-2C05-410A-8157-CD375708EA00}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShoeGrabCommonModels", "shoe-grab-common\shoe-grab-common-lib\ShoeGrabCommonModels.csproj", "{314009D8-C2DD-43FF-B64B-95A893D9AC9B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{612D857A-2C05-410A-8157-CD375708EA00}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{612D857A-2C05-410A-8157-CD375708EA00}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{612D857A-2C05-410A-8157-CD375708EA00}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{612D857A-2C05-410A-8157-CD375708EA00}.Release|Any CPU.Build.0 = Release|Any CPU
+		{314009D8-C2DD-43FF-B64B-95A893D9AC9B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{314009D8-C2DD-43FF-B64B-95A893D9AC9B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{314009D8-C2DD-43FF-B64B-95A893D9AC9B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{314009D8-C2DD-43FF-B64B-95A893D9AC9B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {88266F92-7A27-4350-BC1D-B5C008529EDB}
+	EndGlobalSection
+EndGlobal
