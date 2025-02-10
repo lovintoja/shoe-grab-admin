@@ -14,6 +14,6 @@ public class OrderProfile : Profile
         CreateMap<AddressProto, AddressDto>();
         CreateMap<PaymentInfoProto, PaymentInfoDto>()
             .ForMember(dest => dest.PaymentDate, opt => opt.MapFrom(src => src.PaymentDate.ToDateTime()));
-
+        CreateMap<ProductDto, ProductProto>();
     }
 }
