@@ -31,7 +31,7 @@ public static class BuilderExtension
 
         if (certificatePath != null && certificatePassword != null)
         {
-            var clientCertificate = new X509Certificate2("Resources\\client.pfx", "test123");
+            var clientCertificate = new X509Certificate2(certificatePath, certificatePassword);
 
             orderService.ConfigurePrimaryHttpMessageHandler(() => ConfigureHandlerUseCertificate(clientCertificate));
             productService.ConfigurePrimaryHttpMessageHandler(() => ConfigureHandlerUseCertificate(clientCertificate));
@@ -83,7 +83,7 @@ public static class BuilderExtension
             if (grpcEndpoint.Exists())
             {
                 var grpcUrl = new Uri(grpcEndpoint["Url"]);
-                options.Listen(IPAddress.Any, grpcUrl.Port, listenOptions =>
+                options.Listen(IPAddress.Parse(grpcUrl.Host), grpcUrl.Port, listenOptions =>
                 {
                     listenOptions.Protocols = Enum.Parse<HttpProtocols>(grpcEndpoint["Protocols"]);
                     listenOptions.UseHttps(httpsOptions =>
@@ -106,7 +106,7 @@ public static class BuilderExtension
             if (restApiEndpoint.Exists())
             {
                 var restApiUrl = new Uri(restApiEndpoint["Url"]);
-                options.Listen(IPAddress.Any, restApiUrl.Port, listenOptions =>
+                options.Listen(IPAddress.Parse(restApiUrl.Host), restApiUrl.Port, listenOptions =>
                 {
                     listenOptions.Protocols = Enum.Parse<HttpProtocols>(restApiEndpoint["Protocols"]);
                 });
