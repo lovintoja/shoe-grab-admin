@@ -18,12 +18,12 @@ public static class BuilderExtension
 
         var productService = services.AddGrpcClient<ProductManagement.ProductManagementClient>(options =>
         {
-            options.Address = new Uri(grpcSection["ProductManagementAddress"]);
+            options.Address = new Uri(Environment.GetEnvironmentVariable("PRODUCT_MANAGEMENT_CONNECTION_STRING"));
         });
 
         var orderService = services.AddGrpcClient<OrderManagement.OrderManagementClient>(options =>
         {
-            options.Address = new Uri(grpcSection["OrderManagementAddress"]);
+            options.Address = new Uri(Environment.GetEnvironmentVariable("ORDER_MANAGEMENT_CONNECTION_STRING"));
         });
 
         var certificatePath = grpcSection["Certificate:Path"];
