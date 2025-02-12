@@ -14,8 +14,6 @@ public static class BuilderExtension
 {
     public static void AddGrpcAndClients(this IServiceCollection services, IConfiguration configuration)
     {
-        var grpcSection = configuration.GetSection("GrpcServices");
-
         var productService = services.AddGrpcClient<ProductManagement.ProductManagementClient>(options =>
         {
             options.Address = new Uri(Environment.GetEnvironmentVariable("PRODUCT_MANAGEMENT_CONNECTION_STRING"));
@@ -25,17 +23,6 @@ public static class BuilderExtension
         {
             options.Address = new Uri(Environment.GetEnvironmentVariable("ORDER_MANAGEMENT_CONNECTION_STRING"));
         });
-
-        var certificatePath = grpcSection["Certificate:Path"];
-        var certificatePassword = grpcSection["Certificate:Password"];
-
-        if (certificatePath != null && certificatePassword != null)
-        {
-            var clientCertificate = new X509Certificate2(certificatePath, certificatePassword);
-
-            orderService.ConfigurePrimaryHttpMessageHandler(() => ConfigureHandlerUseCertificate(clientCertificate));
-            productService.ConfigurePrimaryHttpMessageHandler(() => ConfigureHandlerUseCertificate(clientCertificate));
-        }
     }
     public static void AddJWTAuthenticationAndAuthorization(this WebApplicationBuilder builder)
     {
@@ -94,12 +81,5 @@ public static class BuilderExtension
                 });
             }
         });
-    }
-
-    private static HttpClientHandler ConfigureHandlerUseCertificate(X509Certificate2 clientCertificate)
-    {
-        var handler = new HttpClientHandler();
-        handler.ClientCertificates.Add(clientCertificate);
-        return handler;
     }
 }
